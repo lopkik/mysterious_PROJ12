@@ -7,7 +7,7 @@
  */
 class Keyboard {
 
-    static Array keyboard
+    static Array keyboard;
 
     /** Initializes the keyboard. */
     function void init() {
@@ -36,7 +36,7 @@ class Keyboard {
      * F1 - F12 = 141 - 152
      */
     function char keyPressed() {
-        return keyboard[0]
+        return keyboard[0];
     }
 
     /**	Waits until a key is pressed on the keyboard and released,
@@ -64,7 +64,7 @@ class Keyboard {
         let line = String.new(50);
 
         let c = Keyboard.readChar();
-        while (~(c = String.newline())) {
+        while (~(c = String.newLine())) {
             if (c = String.backSpace()) {
                 do line.eraseLastChar();
             } else {
