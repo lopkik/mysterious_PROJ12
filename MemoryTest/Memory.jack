@@ -39,7 +39,7 @@ class Memory {
 
     /** Returns the RAM value at the given address. */
     function int peek(int address) {
-        return memory[address]
+        return memory[address];
     }
 
     /** Sets the RAM value at the given address to the given value. */
@@ -50,7 +50,7 @@ class Memory {
 
     /** Finds an available RAM block of the given size and returns
      *  a reference to its base address. */
-    function int alloc(int size) {
+    function Array alloc(int size) {
         var Array foundBlock, nextBlock, result;
 
         let foundBlock = Memory.bestFit(size);
@@ -102,49 +102,49 @@ class Memory {
     /** De-allocates the given object (cast as an array) by making
      *  it available for future allocations. */
     function void deAlloc(Array o) {
-        var Array preBlock, nextBlock;
+        var Array prevBlock, nextBlock;
         var int size;
 
-        let size = object[ALLOC_LENGTH];
-        let object = object - 1;
-        let preBlock = Memory.findPreFree(object);
+        let size = o[ALLOC_LENGTH];
+        let o = o - 1;
+        let prevBlock = Memory.findPrevFreeBlock(o);
 
-        if (preBlock = null) {
-            let object[LENGTH] = size;
-            let object[NEXT] = freeList;
-            let freeList = object;
+        if (prevBlock = null) {
+            let o[LENGTH] = size;
+            let o[NEXT] = freeList;
+            let freeList = o;
         } else {
-            if ((preBlock + preBlock[LENGTH]) = object) {
-                let preBlock[LENGTH] = preBlock[LENGTH] + size;
-                let object = preBlock;
+            if ((prevBlock + prevBlock[LENGTH]) = o) {
+                let prevBlock[LENGTH] = prevBlock[LENGTH] + size;
+                let o = prevBlock;
             } else {
-                let object[LENGTH] = size;
-                let object[NEXT] = preBlock[NEXT];
-                let preBlock[NEXT] = object;
+                let o[LENGTH] = size;
+                let o[NEXT] = prevBlock[NEXT];
+                let prevBlock[NEXT] = o;
             }
         }
 
-        if ((object + object[LENGTH]) = object[NEXT]) {
-            let nextBlock = object[NEXT];
-            let object[LENGTH] = object[LENGTH] + nextBlock[LENGTH];
-            let object[NEXT] = nextBlock[NEXT];
+        if ((o + o[LENGTH]) = o[NEXT]) {
+            let nextBlock = o[NEXT];
+            let o[LENGTH] = o[LENGTH] + nextBlock[LENGTH];
+            let o[NEXT] = nextBlock[NEXT];
         }
 
         return;
     }    
 
-    function Array findPreFree(int object) {
-        var Array preBlock;
+    function Array findPrevFreeBlock(int object) {
+        var Array prevBlock;
 
         if (freeList > object) {
             return null;
         }
 
-        let preBlock = freeList;
-        while (~(preBlock[NEXT] = null) & (preBlock[NEXT] < object)) {
-            let preBlock = preBlock[NEXT];
+        let prevBlock = freeList;
+        while (~(prevBlock[NEXT] = null) & (prevBlock[NEXT] < object)) {
+            let prevBlock = prevBlock[NEXT];
         }
 
-        return preBlock;
+        return prevBlock;
     }
 }
