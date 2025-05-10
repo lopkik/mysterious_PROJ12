@@ -10,9 +10,9 @@
  * string-oriented operations.
  */
 class String {
-    field int len;
-    field int maxLen;
     field Array chars;
+    field int charsLength;
+    field int stringLength;
 
     /** constructs a new empty string with a maximum length of maxLength
      *  and initial length of 0. */
@@ -21,8 +21,8 @@ class String {
             let maxLength = 1;
         }
 
-        let len = 0;
-        let maxLen = maxLength;
+        let stringLength = 0;
+        let charsLength = maxLength;
         let chars = Array.new(maxLength);
         return this;
     }
@@ -35,7 +35,7 @@ class String {
 
     /** Returns the current length of this string. */
     method int length() {
-        return len;
+        return stringLength;
     }
 
     /** Returns the character at the j-th location of this string. */
@@ -51,17 +51,17 @@ class String {
 
     /** Appends c to this string's end and returns this string. */
     method String appendChar(char c) {
-        if (len < maxLen) {
-            let chars[len] = c;
-            let len = len + 1;
+        if (stringLength < charsLength) {
+            let chars[stringLength] = c;
+            let stringLength = stringLength + 1;
         }
         return this;
     }
 
     /** Erases the last character from this string. */
     method void eraseLastChar() {
-        if (len > 0) {
-            let len = len - 1;
+        if (stringLength > 0) {
+            let stringLength = stringLength - 1;
         }
         return;
     }
@@ -74,7 +74,7 @@ class String {
 
         let intVal = 0;
 
-        if ((len > 0) & (chars[0] = 45)) {
+        if ((stringLength > 0) & (chars[0] = 45)) {
             let isNegative = true;
             let index = 1;
         } else {
@@ -82,7 +82,7 @@ class String {
             let index = 0;
         }
 
-        while ((index < len) & String.isDigit(chars[index])) {
+        while ((index < stringLength) & String.isDigit(chars[index])) {
             let intVal = (intVal * 10) + String.charToInt(chars[index]);
             let index = index + 1;
         }
@@ -96,9 +96,7 @@ class String {
 
     /** Sets this string to hold a representation of the given value. */
     method void setInt(int val) {
-        var int nextDigit;
-
-        let len = 0;
+        let stringLength = 0;
 
         if (val < 0) {
             let val = -val;
@@ -106,7 +104,6 @@ class String {
         }
 
         do writeNumberToString(val);
-
         return;
     }
 
